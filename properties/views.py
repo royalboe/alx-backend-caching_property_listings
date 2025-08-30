@@ -1,17 +1,19 @@
-from rest_framework import viewsets
-from .models import Property
-from .serializers import PropertySerializer
+from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
-from rest_framework.response import Response
+from .models import Property
+from .utils import get_all_properties, get_redis_cache_metrics
 
-# Create your views here.
 
-class PropertyViewSet(viewsets.ModelViewSet):
-    queryset = Property.objects.all().order_by('-created_at')
-    serializer_class = PropertySerializer
+@cache_page(60 * 15)
+def property_list(request):
+    if request.method == 'GET':
+        properties = get_all_properties()
+        data = {'properties': list(properties.values())}
+        return JsonResponse(data=data, status=200, safe=False)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
-    # add caching
-    @method_decorator(cache_page(60*5))  # Cache for 5 minutes
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+def cache_metrics(request):
+    if request.method == 'GET':
+        metrics = get_redis_cache_metrics()
+        return JsonResponse(data=metrics, status=200)

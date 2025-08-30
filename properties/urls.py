@@ -1,8 +1,7 @@
-from .views import PropertyViewSet
-from rest_framework.routers import DefaultRouter
-from django.urls import path, include
+from django.urls import path
+from .views import property_list, cache_metrics
 
-router = DefaultRouter()
-router.register(r'properties', PropertyViewSet)
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('', property_list, name='property_list'),
+    path('cache_metrics/', cache_metrics, name='cache_metrics')
+]
