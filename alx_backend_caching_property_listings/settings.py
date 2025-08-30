@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_redis',
-    'django_rest_framework',
+    'rest_framework',
+    'properties',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,10 @@ DATABASES = {
     'postgresql': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'property_db',
+        'USER': 'XXXXXXXX',
+        'PASSWORD': 'XXXXXXXX',
+        'HOST': 'localhost',
+        'PORT': '5432',
     },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
